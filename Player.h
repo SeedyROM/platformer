@@ -6,8 +6,8 @@
 class Player : public GameObject {
 public:
   float movementSpeed = 250;
-  float acceleration = 15;
-  float damping = 0.91;
+  float acceleration = 25;
+  float damping = 0.8;
 
 
   void update(sf::Time delta) {
@@ -31,12 +31,12 @@ public:
        !sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
        !sf::Keyboard::isKeyPressed(sf::Keyboard::Up) &&
        !sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-      setVelocity(getVelocity().x * damping, getVelocity().y * damping);
+      setVelocity(getVelocity().x * 0.75, getVelocity().y * 0.75);
     }
 
     // Keep our player in the correction portion of the screen.
-    //setPosition(clamp(getPosition().x, getGlobalBounds().width / 2, GSGetWindowSize.x - 80), clamp(getPosition().y,
-    //                  getGlobalBounds().width / 2, GSGetWindowSize.y - (getGlobalBounds().height / 2)));
+    setPosition(clamp(getPosition().x, getGlobalBounds().width / 2, GSGetWindowSize.x - 80), clamp(getPosition().y,
+                      getGlobalBounds().width / 2, GSGetWindowSize.y - (getGlobalBounds().height / 2)));
 
     _update(delta);
   }

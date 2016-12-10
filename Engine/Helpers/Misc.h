@@ -1,14 +1,4 @@
 #pragma once
-#include "../Particle.h"
-
-inline void spawnParticles(std::vector<GameObject *> &objects, int amount, sf::Texture& texture) {
-  for(int i=0; i<amount; i++) {
-    Particle *go = new Particle();
-    go->loadSprite(texture);
-    go->setVelocity((rand() % 400) - 200, (rand() % 400) - 200);
-    objects.push_back(go);
-  }
-}
 
 inline void psuedoClear(sf::RenderWindow &window, sf::Color color, int opacity) {
   sf::RectangleShape rectangle;

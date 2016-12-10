@@ -1,8 +1,8 @@
 #pragma once
 #include <array>
 #include <SFML/Graphics.hpp>
-#include "../Engine/GameObject.h"
 #include "../Engine/Helpers/Misc.h"
+#include "../Engine/GameObject.h"
 
 namespace Physics {
   class Point : public sf::Vector2f {
@@ -31,8 +31,7 @@ namespace Physics {
   typedef std::pair<Point, Point> Line;
   typedef std::array<Line, 4> RectSides;
 
-  class AABB : public sf::FloatRect {
-  public:
+  struct AABB : public sf::FloatRect {
     using sf::FloatRect::FloatRect;
 
     RectSides getGlobalSides() const {
@@ -44,6 +43,15 @@ namespace Physics {
       return sides;
     }
 
+    void drawDebugRect() {
+      sf::Vector2f bounds = sf::Vector2f(width, height);
+      sf::RectangleShape debug(bounds);
+      debug.setFillColor(sf::Color(255, 255, 255, 0));
+      debug.setOutlineThickness(2);
+      debug.setOutlineColor(sf::Color(0, 255, 40));
+      debug.setPosition(sf::Vector2f(left, top));
+      GSGetWindow->draw(debug);
+    }
   }; // End AABB.
 
   static bool lineCollision(const Point &a1, const Point &a2,
@@ -105,13 +113,13 @@ namespace Physics {
         return nullResult;
     } else {
         // get center X's of this and other box
-        float thisCenterX = (a.left + a.left+a.width) / 2.0f;
-        float otherCenterX = (b.left + b.left+b.width) / 2.0f;
+        float thisCenterX = a.left + (a.left + a.width) / 2;
+        float otherCenterX = b.left + (b.left + b.width) / 2;
 
         if(thisCenterX < otherCenterX) {
-            xOverlap = a.left+a.width - b.left;
+            xOverlap = (a.left+a.width - b.left);
         } else {
-            xOverlap = b.left+a.width - a.left;
+            xOverlap = (b.left+a.width - a.left) * -1;
         }
     }
 
@@ -120,17 +128,16 @@ namespace Physics {
         return nullResult;
     } else {
         // get center Y's of this and other box
-        float thisCenterY = (a.top + a.top+a.height) / 2.0f;
-        float otherCenterY = (b.top + b.top+b.height) / 2.0f;
+        float thisCenterY = a.top + (a.top + a.height) / 2;
+        float otherCenterY = b.top + (b.top + b.height) / 2;
 
         if(thisCenterY < otherCenterY) {
-            yOverlap = a.top+a.height - b.top;
+            yOverlap = (a.top+a.height - b.top);
         } else {
-            yOverlap = b.top+a.height - a.top;
+            yOverlap = (b.top+a.height - a.top) * -1;
         }
     }
 
-    return sf::Vector2f(xOverlap / 2, yOverlap / 2);
+    return sf::Vector2f((int)xOverlap, (int)yOverlap);
   }
-
 } // End namespace.

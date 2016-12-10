@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../Physics/AABB.h"
 
 class GameObject : public sf::Sprite {
 public:
@@ -25,19 +26,13 @@ public:
   }
 
   void destroy() { m_destroyed = true; }
-  bool isDestroyed() { return m_destroyed; }
+  bool isDestroyed() const { return m_destroyed; }
 
-  int getDepth() { return m_depth; }
+  int getDepth() const { return m_depth; }
   void setDepth(int depth) { m_depth = depth; }
 
-  void drawDebugRect() {
-    sf::Vector2f bounds = sf::Vector2f(getGlobalBounds().width, getGlobalBounds().height);
-    sf::RectangleShape debug(bounds);
-    debug.setFillColor(sf::Color(255, 255, 255, 0));
-    debug.setOutlineThickness(2);
-    debug.setOutlineColor(sf::Color(0, 255, 40));
-    debug.setPosition(getPosition() - (bounds / 2.f));
-    GSGetWindow->draw(debug);
+  Physics::AABB getAABB() {
+    return (Physics::AABB) getGlobalBounds();
   }
 
   virtual void update(sf::Time) {}
